@@ -1,217 +1,194 @@
 ﻿/**
- * Troywings Technologies Registration Page JavaScript
- * Handles form validation, animations, and user interactions
+ * Troywings Technologies - Registration Page
+ * Form Validation, Animations & User Interactions
  */
 
-// Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function () {
 
     // ===================================
-    // FORM ELEMENTS
+    // DOM ELEMENTS
     // ===================================
 
-    const registrationForm = document.getElementById('registrationForm');
-    const fullNameInput = document.getElementById('fullName');
-    const fatherNameInput = document.getElementById('fatherName');
-    const dobInput = document.getElementById('dob');
-    const emailInput = document.getElementById('email');
-    const addressInput = document.getElementById('address');
-    const phoneInput = document.getElementById('phone');
-    const termsCheckbox = document.getElementById('terms');
+    const form = document.getElementById('registrationForm');
+    const inputs = {
+        fullName: document.getElementById('fullName'),
+        fatherName: document.getElementById('fatherName'),
+        dob: document.getElementById('dob'),
+        email: document.getElementById('email'),
+        address: document.getElementById('address'),
+        phone: document.getElementById('phone'),
+        terms: document.getElementById('terms')
+    };
 
-    // Error message elements
-    const fullNameError = document.getElementById('fullNameError');
-    const fatherNameError = document.getElementById('fatherNameError');
-    const dobError = document.getElementById('dobError');
-    const emailError = document.getElementById('emailError');
-    const addressError = document.getElementById('addressError');
-    const phoneError = document.getElementById('phoneError');
+    const errors = {
+        fullName: document.getElementById('fullNameError'),
+        fatherName: document.getElementById('fatherNameError'),
+        dob: document.getElementById('dobError'),
+        email: document.getElementById('emailError'),
+        address: document.getElementById('addressError'),
+        phone: document.getElementById('phoneError')
+    };
 
     // ===================================
-    // FORM SUBMISSION HANDLING
+    // FORM SUBMISSION
     // ===================================
 
-    if (registrationForm) {
-        registrationForm.addEventListener('submit', function (e) {
-            e.preventDefault();
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-            // Clear previous errors
-            clearAllErrors();
+        // Clear all previous errors
+        clearAllErrors();
 
-            // Validate all fields
-            let isValid = true;
+        // Validate all fields
+        let isValid = true;
 
-            // Validate Full Name
-            if (!validateFullName()) {
-                isValid = false;
-            }
+        if (!validateFullName()) isValid = false;
+        if (!validateFatherName()) isValid = false;
+        if (!validateDOB()) isValid = false;
+        if (!validateEmail()) isValid = false;
+        if (!validateAddress()) isValid = false;
 
-            // Validate Father's Name
-            if (!validateFatherName()) {
-                isValid = false;
-            }
+        // Phone is optional but validate if provided
+        if (inputs.phone.value.trim() && !validatePhone()) {
+            isValid = false;
+        }
 
-            // Validate Date of Birth
-            if (!validateDOB()) {
-                isValid = false;
-            }
+        // Check terms
+        if (!inputs.terms.checked) {
+            showNotification('Please accept the Terms & Conditions', 'error');
+            isValid = false;
+        }
 
-            // Validate Email
-            if (!validateEmail()) {
-                isValid = false;
-            }
-
-            // Validate Address
-            if (!validateAddress()) {
-                isValid = false;
-            }
-
-            // Validate Phone (optional but if provided, must be valid)
-            if (phoneInput.value && !validatePhone()) {
-                isValid = false;
-            }
-
-            // Validate Terms
-            if (!termsCheckbox.checked) {
-                showNotification('Please accept the Terms & Conditions', 'error');
-                isValid = false;
-            }
-
-            // If all validations pass, submit the form
-            if (isValid) {
-                submitForm();
-            }
-        });
-    }
+        // Submit if valid
+        if (isValid) {
+            submitForm();
+        } else {
+            showNotification('Please fix the errors in the form', 'error');
+        }
+    });
 
     // ===================================
     // VALIDATION FUNCTIONS
     // ===================================
 
     function validateFullName() {
-        const value = fullNameInput.value.trim();
+        const value = inputs.fullName.value.trim();
 
         if (!value) {
-            showError(fullNameInput, fullNameError, 'Full name is required');
+            setError('fullName', 'Full name is required');
             return false;
         }
 
         if (value.length < 3) {
-            showError(fullNameInput, fullNameError, 'Name must be at least 3 characters');
+            setError('fullName', 'Name must be at least 3 characters long');
             return false;
         }
 
         if (!/^[a-zA-Z\s]+$/.test(value)) {
-            showError(fullNameInput, fullNameError, 'Name should only contain letters');
+            setError('fullName', 'Name should only contain letters and spaces');
             return false;
         }
 
-        showSuccess(fullNameInput, fullNameError);
+        setSuccess('fullName');
         return true;
     }
 
     function validateFatherName() {
-        const value = fatherNameInput.value.trim();
+        const value = inputs.fatherName.value.trim();
 
         if (!value) {
-            showError(fatherNameInput, fatherNameError, "Father's name is required");
+            setError('fatherName', "Father's name is required");
             return false;
         }
 
         if (value.length < 3) {
-            showError(fatherNameInput, fatherNameError, 'Name must be at least 3 characters');
+            setError('fatherName', 'Name must be at least 3 characters long');
             return false;
         }
 
         if (!/^[a-zA-Z\s]+$/.test(value)) {
-            showError(fatherNameInput, fatherNameError, 'Name should only contain letters');
+            setError('fatherName', 'Name should only contain letters and spaces');
             return false;
         }
 
-        showSuccess(fatherNameInput, fatherNameError);
+        setSuccess('fatherName');
         return true;
     }
 
     function validateDOB() {
-        const value = dobInput.value;
+        const value = inputs.dob.value;
 
         if (!value) {
-            showError(dobInput, dobError, 'Date of birth is required');
+            setError('dob', 'Date of birth is required');
             return false;
         }
 
-        const dob = new Date(value);
+        const birthDate = new Date(value);
         const today = new Date();
-        const age = today.getFullYear() - dob.getFullYear();
-        const monthDiff = today.getMonth() - dob.getMonth();
-
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-            age--;
-        }
+        const age = calculateAge(birthDate, today);
 
         if (age < 18) {
-            showError(dobInput, dobError, 'You must be at least 18 years old');
+            setError('dob', 'You must be at least 18 years old');
             return false;
         }
 
         if (age > 100) {
-            showError(dobInput, dobError, 'Please enter a valid date of birth');
+            setError('dob', 'Please enter a valid date of birth');
             return false;
         }
 
-        showSuccess(dobInput, dobError);
+        setSuccess('dob');
         return true;
     }
 
     function validateEmail() {
-        const value = emailInput.value.trim();
+        const value = inputs.email.value.trim();
 
         if (!value) {
-            showError(emailInput, emailError, 'Email address is required');
+            setError('email', 'Email address is required');
             return false;
         }
 
-        if (!isValidEmail(value)) {
-            showError(emailInput, emailError, 'Please enter a valid email address');
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(value)) {
+            setError('email', 'Please enter a valid email address');
             return false;
         }
 
-        showSuccess(emailInput, emailError);
+        setSuccess('email');
         return true;
     }
 
     function validateAddress() {
-        const value = addressInput.value.trim();
+        const value = inputs.address.value.trim();
 
         if (!value) {
-            showError(addressInput, addressError, 'Address is required');
+            setError('address', 'Address is required');
             return false;
         }
 
         if (value.length < 10) {
-            showError(addressInput, addressError, 'Please enter a complete address (minimum 10 characters)');
+            setError('address', 'Please enter a complete address (minimum 10 characters)');
             return false;
         }
 
-        showSuccess(addressInput, addressError);
+        setSuccess('address');
         return true;
     }
 
     function validatePhone() {
-        const value = phoneInput.value.trim();
+        const value = inputs.phone.value.trim();
 
-        // Phone is optional, but if provided, must be valid
         if (value) {
-            // Remove all non-digit characters for validation
             const digitsOnly = value.replace(/\D/g, '');
 
             if (digitsOnly.length < 10 || digitsOnly.length > 15) {
-                showError(phoneInput, phoneError, 'Please enter a valid phone number');
+                setError('phone', 'Please enter a valid phone number (10-15 digits)');
                 return false;
             }
         }
 
-        showSuccess(phoneInput, phoneError);
+        setSuccess('phone');
         return true;
     }
 
@@ -219,41 +196,40 @@ document.addEventListener('DOMContentLoaded', function () {
     // REAL-TIME VALIDATION
     // ===================================
 
-    fullNameInput.addEventListener('blur', validateFullName);
-    fatherNameInput.addEventListener('blur', validateFatherName);
-    dobInput.addEventListener('blur', validateDOB);
-    emailInput.addEventListener('blur', validateEmail);
-    addressInput.addEventListener('blur', validateAddress);
-    phoneInput.addEventListener('blur', validatePhone);
+    inputs.fullName.addEventListener('blur', validateFullName);
+    inputs.fatherName.addEventListener('blur', validateFatherName);
+    inputs.dob.addEventListener('blur', validateDOB);
+    inputs.email.addEventListener('blur', validateEmail);
+    inputs.address.addEventListener('blur', validateAddress);
+    inputs.phone.addEventListener('blur', validatePhone);
 
-    // ===================================
-    // INPUT ANIMATIONS & INTERACTIONS
-    // ===================================
-
-    const allInputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea');
-
-    allInputs.forEach(input => {
-        // Focus animation
-        input.addEventListener('focus', function () {
-            this.parentElement.style.transform = 'scale(1.01)';
-            this.parentElement.style.transition = 'transform 0.3s ease';
-        });
-
-        // Blur animation
-        input.addEventListener('blur', function () {
-            this.parentElement.style.transform = 'scale(1)';
-        });
-
-        // Input animation
-        input.addEventListener('input', function () {
-            // Clear error on input
-            if (this.classList.contains('error')) {
-                this.classList.remove('error');
-                const errorElement = document.getElementById(this.id + 'Error');
-                if (errorElement) {
-                    errorElement.textContent = '';
+    // Clear error on input
+    Object.keys(inputs).forEach(key => {
+        if (inputs[key] && inputs[key].tagName !== 'INPUT' || inputs[key].type !== 'checkbox') {
+            inputs[key].addEventListener('input', function () {
+                if (this.classList.contains('error')) {
+                    this.classList.remove('error');
+                    if (errors[key]) {
+                        errors[key].textContent = '';
+                    }
                 }
-            }
+            });
+        }
+    });
+
+    // ===================================
+    // INPUT ANIMATIONS
+    // ===================================
+
+    const allTextInputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea');
+
+    allTextInputs.forEach(input => {
+        input.addEventListener('focus', function () {
+            this.style.transform = 'scale(1.01)';
+        });
+
+        input.addEventListener('blur', function () {
+            this.style.transform = 'scale(1)';
         });
     });
 
@@ -261,15 +237,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // PHONE NUMBER FORMATTING
     // ===================================
 
-    phoneInput.addEventListener('input', function (e) {
+    inputs.phone.addEventListener('input', function (e) {
         let value = e.target.value.replace(/\D/g, '');
 
         if (value.length > 0) {
             if (value.length <= 10) {
-                // Format as: XXXXX XXXXX
+                // Format: XXXXX XXXXX
                 value = value.replace(/(\d{5})(\d{1,5})/, '$1 $2');
             } else {
-                // Format as: +XX XXXXX XXXXX
+                // Format: +XX XXXXX XXXXX
                 value = value.replace(/(\d{2})(\d{5})(\d{1,5})/, '+$1 $2 $3');
             }
         }
@@ -278,50 +254,104 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ===================================
-    // FORM SUBMISSION
+    // DATE RESTRICTIONS
+    // ===================================
+
+    const today = new Date();
+
+    // Maximum date: 18 years ago
+    const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+    inputs.dob.max = formatDate(maxDate);
+
+    // Minimum date: 100 years ago
+    const minDate = new Date(today.getFullYear() - 100, today.getMonth(), today.getDate());
+    inputs.dob.min = formatDate(minDate);
+
+    // ===================================
+    // KEYBOARD NAVIGATION
+    // ===================================
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'submit') {
+            e.preventDefault();
+
+            const formElements = Array.from(form.querySelectorAll('input, textarea')).filter(el => {
+                return el.type !== 'checkbox' && el.type !== 'submit';
+            });
+
+            const currentIndex = formElements.indexOf(e.target);
+
+            if (currentIndex > -1 && currentIndex < formElements.length - 1) {
+                formElements[currentIndex + 1].focus();
+            }
+        }
+    });
+
+    // ===================================
+    // LINK HANDLING
+    // ===================================
+
+    document.querySelectorAll('a[href="#"]').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const text = this.textContent.trim();
+
+            if (text === 'Terms & Conditions') {
+                showNotification('Terms & Conditions page - Coming soon', 'info');
+            } else if (text === 'Privacy Policy') {
+                showNotification('Privacy Policy page - Coming soon', 'info');
+            } else if (text === 'Sign in here') {
+                showNotification('Redirecting to login page...', 'info');
+                // In production: window.location.href = '/login';
+            }
+        });
+    });
+
+    // ===================================
+    // FORM SUBMISSION HANDLER
     // ===================================
 
     function submitForm() {
-        const btn = registrationForm.querySelector('.btn-primary');
-        const btnText = btn.querySelector('.btn-text');
-        const btnIcon = btn.querySelector('.btn-icon');
+        const submitBtn = form.querySelector('.btn-submit');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnIcon = submitBtn.querySelector('.btn-icon');
 
-        // Add loading state
-        btn.classList.add('loading');
-        btnText.style.opacity = '0';
-        btnIcon.style.opacity = '0';
+        // Show loading state
+        submitBtn.classList.add('loading');
 
         // Collect form data
         const formData = {
-            fullName: fullNameInput.value.trim(),
-            fatherName: fatherNameInput.value.trim(),
-            dateOfBirth: dobInput.value,
-            email: emailInput.value.trim(),
-            address: addressInput.value.trim(),
-            phone: phoneInput.value.trim() || null
+            fullName: inputs.fullName.value.trim(),
+            fatherName: inputs.fatherName.value.trim(),
+            dateOfBirth: inputs.dob.value,
+            email: inputs.email.value.trim(),
+            address: inputs.address.value.trim(),
+            phone: inputs.phone.value.trim() || null
         };
 
-        // Simulate API call (replace with actual API endpoint)
+        // Simulate API call
         setTimeout(() => {
             // Remove loading state
-            btn.classList.remove('loading');
-            btnText.style.opacity = '1';
-            btnIcon.style.opacity = '1';
+            submitBtn.classList.remove('loading');
 
-            // Log form data (for demo purposes)
+            // Log data (for demo)
             console.log('Registration Data:', formData);
 
-            // Show success message
+            // Show success
             showNotification('Registration successful! Welcome to Troywings Technologies.', 'success');
 
-            // In production, redirect to dashboard or success page
-            // window.location.href = '/dashboard';
-
-            // For demo, reset form after 2 seconds
+            // Reset form after delay
             setTimeout(() => {
-                registrationForm.reset();
+                form.reset();
                 clearAllErrors();
             }, 2000);
+
+            // In production, redirect to dashboard:
+            // setTimeout(() => {
+            //     window.location.href = '/dashboard';
+            // }, 1500);
+
         }, 2500);
     }
 
@@ -329,64 +359,107 @@ document.addEventListener('DOMContentLoaded', function () {
     // UTILITY FUNCTIONS
     // ===================================
 
-    function showError(input, errorElement, message) {
-        input.classList.remove('success');
-        input.classList.add('error');
-        errorElement.textContent = message;
+    function setError(fieldName, message) {
+        inputs[fieldName].classList.add('error');
+        inputs[fieldName].classList.remove('success');
+        if (errors[fieldName]) {
+            errors[fieldName].textContent = message;
+        }
     }
 
-    function showSuccess(input, errorElement) {
-        input.classList.remove('error');
-        input.classList.add('success');
-        errorElement.textContent = '';
+    function setSuccess(fieldName) {
+        inputs[fieldName].classList.remove('error');
+        inputs[fieldName].classList.add('success');
+        if (errors[fieldName]) {
+            errors[fieldName].textContent = '';
+        }
     }
 
     function clearAllErrors() {
-        const allInputs = registrationForm.querySelectorAll('input, textarea');
-        allInputs.forEach(input => {
-            input.classList.remove('error', 'success');
+        Object.keys(inputs).forEach(key => {
+            if (inputs[key] && inputs[key].tagName !== 'INPUT' || inputs[key].type !== 'checkbox') {
+                inputs[key].classList.remove('error', 'success');
+            }
         });
 
-        const allErrors = registrationForm.querySelectorAll('.error-message');
-        allErrors.forEach(error => {
-            error.textContent = '';
+        Object.keys(errors).forEach(key => {
+            if (errors[key]) {
+                errors[key].textContent = '';
+            }
         });
     }
 
-    function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
+    function calculateAge(birthDate, today) {
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+
+        return age;
+    }
+
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     }
 
     function showNotification(message, type = 'info') {
-        // Create notification element
+        // Remove existing notifications
+        const existing = document.querySelector('.notification');
+        if (existing) {
+            existing.remove();
+        }
+
+        // Create notification
         const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
+        notification.className = 'notification';
+
+        // Set color based on type
+        let bgColor;
+        switch (type) {
+            case 'success':
+                bgColor = '#10b981';
+                break;
+            case 'error':
+                bgColor = '#ef4444';
+                break;
+            case 'warning':
+                bgColor = '#f59e0b';
+                break;
+            default:
+                bgColor = '#14b8a6';
+        }
+
         notification.style.cssText = `
             position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 16px 24px;
-            background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#14b8a6'};
+            top: 24px;
+            right: 24px;
+            padding: 18px 28px;
+            background: ${bgColor};
             color: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 14px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
             z-index: 10000;
             font-weight: 600;
-            font-size: 14px;
-            animation: slideInRight 0.4s ease-out;
-            max-width: 400px;
+            font-size: 15px;
+            max-width: 420px;
+            animation: slideInRight 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         `;
+
         notification.textContent = message;
 
-        // Add animation styles if not already added
+        // Add animation styles
         if (!document.getElementById('notification-styles')) {
             const style = document.createElement('style');
             style.id = 'notification-styles';
             style.textContent = `
                 @keyframes slideInRight {
                     from {
-                        transform: translateX(400px);
+                        transform: translateX(450px);
                         opacity: 0;
                     }
                     to {
@@ -400,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         opacity: 1;
                     }
                     to {
-                        transform: translateX(400px);
+                        transform: translateX(450px);
                         opacity: 0;
                     }
                 }
@@ -410,9 +483,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.body.appendChild(notification);
 
-        // Remove notification after 4 seconds
+        // Auto remove after 4 seconds
         setTimeout(() => {
-            notification.style.animation = 'slideOutRight 0.4s ease-out';
+            notification.style.animation = 'slideOutRight 0.4s cubic-bezier(0.22, 1, 0.36, 1)';
             setTimeout(() => {
                 notification.remove();
             }, 400);
@@ -420,125 +493,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ===================================
-    // LINK HANDLING (Demo Mode)
+    // CONSOLE INFO
     // ===================================
 
-    const links = document.querySelectorAll('a[href="#"]');
-
-    links.forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            const linkText = this.textContent.trim();
-
-            if (linkText === 'Terms & Conditions') {
-                showNotification('Terms & Conditions page would open here', 'info');
-            } else if (linkText === 'Privacy Policy') {
-                showNotification('Privacy Policy page would open here', 'info');
-            } else if (linkText === 'Sign in here') {
-                showNotification('Redirecting to login page...', 'info');
-                // In production: window.location.href = '/login';
-            } else {
-                showNotification(`Link to: ${linkText}`, 'info');
-            }
-        });
-    });
-
-    // ===================================
-    // KEYBOARD SHORTCUTS
-    // ===================================
-
-    document.addEventListener('keydown', function (e) {
-        // Navigate between fields with Enter key
-        if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'submit') {
-            e.preventDefault();
-
-            const inputs = Array.from(registrationForm.querySelectorAll('input, textarea'));
-            const currentIndex = inputs.indexOf(e.target);
-
-            if (currentIndex < inputs.length - 1) {
-                inputs[currentIndex + 1].focus();
-            }
-        }
-    });
-
-    // ===================================
-    // DATE INPUT RESTRICTIONS
-    // ===================================
-
-    // Set max date to 18 years ago
-    const today = new Date();
-    const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
-    const maxDateString = maxDate.toISOString().split('T')[0];
-    dobInput.setAttribute('max', maxDateString);
-
-    // Set min date to 100 years ago
-    const minDate = new Date(today.getFullYear() - 100, today.getMonth(), today.getDate());
-    const minDateString = minDate.toISOString().split('T')[0];
-    dobInput.setAttribute('min', minDateString);
-
-    // ===================================
-    // AUTO-SAVE DRAFT (Optional Enhancement)
-    // ===================================
-
-    // Uncomment to enable auto-save functionality
-    /*
-    let autoSaveTimeout;
-
-    function autoSaveDraft() {
-        clearTimeout(autoSaveTimeout);
-        
-        autoSaveTimeout = setTimeout(() => {
-            const draftData = {
-                fullName: fullNameInput.value,
-                fatherName: fatherNameInput.value,
-                dob: dobInput.value,
-                email: emailInput.value,
-                address: addressInput.value,
-                phone: phoneInput.value
-            };
-            
-            // Note: localStorage is not available in Claude.ai artifacts
-            // In production environment, you would use:
-            // localStorage.setItem('registrationDraft', JSON.stringify(draftData));
-            
-            console.log('Draft saved:', draftData);
-        }, 1000);
-    }
-
-    allInputs.forEach(input => {
-        input.addEventListener('input', autoSaveDraft);
-    });
-
-    // Load draft on page load
-    // In production environment:
-    // const savedDraft = localStorage.getItem('registrationDraft');
-    // if (savedDraft) {
-    //     const draftData = JSON.parse(savedDraft);
-    //     fullNameInput.value = draftData.fullName || '';
-    //     fatherNameInput.value = draftData.fatherName || '';
-    //     dobInput.value = draftData.dob || '';
-    //     emailInput.value = draftData.email || '';
-    //     addressInput.value = draftData.address || '';
-    //     phoneInput.value = draftData.phone || '';
-    // }
-    */
-
-    // ===================================
-    // CONSOLE LOG ON PAGE LOAD
-    // ===================================
-
-    console.log('%c🚀 Troywings Technologies Registration System', 'color: #14b8a6; font-size: 16px; font-weight: bold;');
-    console.log('%cVersion: 1.0.0 | A Drive for Future', 'color: #94a3b8; font-size: 12px;');
+    console.log('%c🚀 Troywings Technologies', 'color: #14b8a6; font-size: 18px; font-weight: bold;');
+    console.log('%cRegistration System v1.0 - A Drive for Future', 'color: #94a3b8; font-size: 13px;');
+    console.log('%cForm validation and animations active', 'color: #10b981; font-size: 12px;');
 });
 
 // ===================================
-// PRODUCTION READY API INTEGRATION
+// PRODUCTION API INTEGRATION
 // ===================================
 
 /**
- * Example API call function for production use
- * Uncomment and modify for actual implementation
+ * Use this function for actual API integration
+ * Uncomment and modify for production
  */
 /*
 async function registerUser(formData) {
@@ -554,17 +523,17 @@ async function registerUser(formData) {
         const data = await response.json();
         
         if (response.ok) {
-            // Registration successful
             showNotification('Registration successful!', 'success');
             
-            // Redirect to login or dashboard
+            // Redirect after success
             setTimeout(() => {
-                window.location.href = '/login';
+                window.location.href = '/dashboard';
             }, 2000);
+            
         } else {
-            // Show error message from server
             showNotification(data.message || 'Registration failed. Please try again.', 'error');
         }
+        
     } catch (error) {
         console.error('Registration error:', error);
         showNotification('An error occurred. Please try again later.', 'error');
