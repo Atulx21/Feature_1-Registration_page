@@ -620,7 +620,7 @@ textarea.success {
 
 .hero-section {
     padding: 50px 60px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+    background: linear-gradient(135deg, #011412, #0a424c, #000000);
     position: relative;
     display: flex;
     align-items: center;
