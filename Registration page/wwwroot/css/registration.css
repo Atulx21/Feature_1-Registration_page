@@ -38,7 +38,7 @@
 }
 
 body {
-    font-family: 'Inter', 'Poppins', sans-serif;
+    font-family: 'Red Hat Text', sans-serif;
     background: var(--bg-darker);
     color: var(--text-primary);
     min-height: 100vh;
@@ -282,7 +282,7 @@ body {
 }
 
 .logo-title {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Red Hat Display', sans-serif; /* Changed */
     font-size: 24px;
     font-weight: 800;
     color: var(--text-primary);
@@ -306,8 +306,8 @@ body {
 }
 
     .form-header h2 {
-        font-family: 'Poppins', sans-serif;
-        font-size: 32px;
+        font-family: 'Red Hat Display', sans-serif; /* Changed */
+        font-size: 38px;
         font-weight: 700;
         color: var(--text-primary);
         margin-bottom: 8px;
@@ -354,7 +354,7 @@ label {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 10px;
@@ -384,8 +384,8 @@ textarea {
     border: 2px solid var(--border);
     border-radius: 12px;
     color: var(--text-primary);
-    font-size: 15px;
-    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-family: 'Red Hat Text', sans-serif; /* Changed */
     transition: all 0.3s ease;
 }
 
@@ -610,7 +610,7 @@ textarea.success {
 }
 
     .form-footer p {
-        font-size: 14px;
+        font-size: 16px;
         color: var(--text-secondary);
     }
 
@@ -693,8 +693,8 @@ textarea.success {
 }
 
 .hero-header h1 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 42px;
+    font-family: 'Red Hat Display', sans-serif; /* Changed */
+    font-size: 50px;
     font-weight: 800;
     color: white;
     line-height: 1.2;
@@ -703,7 +703,7 @@ textarea.success {
 }
 
 .hero-header p {
-    font-size: 16px;
+    font-size: 18px;
     color: rgba(255, 255, 255, 0.95);
     line-height: 1.7;
 }
@@ -775,14 +775,14 @@ textarea.success {
 }
 
 .feature-content h4 {
-    font-size: 17px;
+    font-size: 19px;
     font-weight: 700;
     color: white;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .feature-content p {
-    font-size: 14px;
+    font-size: 15px;
     color: rgba(255, 255, 255, 0.9);
     line-height: 1.5;
 }
