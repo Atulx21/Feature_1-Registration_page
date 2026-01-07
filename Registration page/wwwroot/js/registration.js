@@ -478,7 +478,6 @@ document.addEventListener('DOMContentLoaded', function () {
     window.showNotification = showNotification;
 
 }); // <--- This is the end of your file
-});
 
 // ===================================
 // PRODUCTION API INTEGRATION
