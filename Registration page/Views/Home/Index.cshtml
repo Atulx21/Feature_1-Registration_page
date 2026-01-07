@@ -55,7 +55,7 @@
                 </div>
 
                 <!-- Registration Form -->
-                <form id="registrationForm" class="registration-form">
+                <form asp-action="Register" asp-controller="Home" method="post" class="registration-form">
 
                     <!-- Full Name -->
                     <div class="form-group">
@@ -94,7 +94,7 @@
                             </label>
                             <input type="date"
                                    id="dob"
-                                   name="dob"
+                                   name="DateOfBirth"
                                    required />
                             <span class="error-message" id="dobError"></span>
                         </div>
@@ -135,7 +135,7 @@
                         </label>
                         <input type="tel"
                                id="phone"
-                               name="phone"
+                               name="PhoneNumber"
                                placeholder="+91 XXXXX XXXXX" />
                         <span class="error-message" id="phoneError"></span>
                     </div>
@@ -246,5 +246,21 @@
 
     <!-- Custom JavaScript -->
     <script src="~/js/registration.js"></script>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Wait a tiny bit for the main JS to load, then show popup
+                setTimeout(function() {
+                    if (window.showNotification) {
+                        window.showNotification('@TempData["SuccessMessage"]', 'success');
+                    } else {
+                        alert('@TempData["SuccessMessage"]'); // Fallback just in case
+                    }
+                }, 100);
+            });
+        </script>
+    }
 </body>
 </html>

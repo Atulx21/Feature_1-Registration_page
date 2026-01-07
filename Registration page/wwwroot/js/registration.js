@@ -314,45 +314,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function submitForm() {
         const submitBtn = form.querySelector('.btn-submit');
-        const btnText = submitBtn.querySelector('.btn-text');
-        const btnIcon = submitBtn.querySelector('.btn-icon');
 
-        // Show loading state
+        // Show loading state (visual feedback)
         submitBtn.classList.add('loading');
+        submitBtn.querySelector('.btn-text').textContent = "Registering...";
 
-        // Collect form data
-        const formData = {
-            fullName: inputs.fullName.value.trim(),
-            fatherName: inputs.fatherName.value.trim(),
-            dateOfBirth: inputs.dob.value,
-            email: inputs.email.value.trim(),
-            address: inputs.address.value.trim(),
-            phone: inputs.phone.value.trim() || null
-        };
-
-        // Simulate API call
-        setTimeout(() => {
-            // Remove loading state
-            submitBtn.classList.remove('loading');
-
-            // Log data (for demo)
-            console.log('Registration Data:', formData);
-
-            // Show success
-            showNotification('Registration successful! Welcome to Troywings Technologies.', 'success');
-
-            // Reset form after delay
-            setTimeout(() => {
-                form.reset();
-                clearAllErrors();
-            }, 2000);
-
-            // In production, redirect to dashboard:
-            // setTimeout(() => {
-            //     window.location.href = '/dashboard';
-            // }, 1500);
-
-        }, 2500);
+        // ----------------------------------------------------
+        // CRITICAL CHANGE: Actually submit the form to the Server
+        // ----------------------------------------------------
+        // This bypasses the 'preventDefault' and sends the data 
+        // to your C# Home/Register controller.
+        form.submit();
     }
 
     // ===================================
@@ -499,6 +471,13 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('%c🚀 Troywings Technologies', 'color: #14b8a6; font-size: 18px; font-weight: bold;');
     console.log('%cRegistration System v1.0 - A Drive for Future', 'color: #94a3b8; font-size: 13px;');
     console.log('%cForm validation and animations active', 'color: #10b981; font-size: 12px;');
+
+    // ... existing code ...
+
+    // Make this function accessible to the HTML page
+    window.showNotification = showNotification;
+
+}); // <--- This is the end of your file
 });
 
 // ===================================
