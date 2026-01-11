@@ -1,901 +1,295 @@
-﻿/* ===================================
-   Troywings Technologies - Registration Page
-   Modern & Professional Design
-   =================================== */
-
-/* ===== RESET & BASE ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+﻿/* =========================================
+   Troywings Technologies - Premium Registration
+   Theme: Dark Glassmorphism (Teal/Cyan)
+   ========================================= */
 
 :root {
-    /* Colors */
-    --primary: #14b8a6;
-    --primary-dark: #0d9488;
-    --primary-light: #5eead4;
-    --secondary: #06b6d4;
-    --accent: #0891b2;
-    /* Background Colors */
-    --bg-dark: #0f172a;
-    --bg-darker: #0a0f1e;
-    --bg-card: #1e293b;
-    --bg-input: #1a2332;
-    /* Text Colors */
-    --text-primary: #f8fafc;
-    --text-secondary: #cbd5e1;
-    --text-muted: #94a3b8;
-    /* Status Colors */
-    --success: #10b981;
-    --error: #ef4444;
-    --warning: #f59e0b;
-    /* Other */
-    --border: rgba(148, 163, 184, 0.15);
-    --shadow: rgba(0, 0, 0, 0.3);
-    --radius: 16px;
-    --radius-lg: 24px;
+    --primary: #14b8a6; /* Teal 500 */
+    --primary-hover: #0d9488; /* Teal 600 */
+    --secondary: #06b6d4; /* Cyan 500 */
+    --bg-dark: #0f172a; /* Slate 900 */
+    --bg-darker: #020617; /* Slate 950 */
+    --text-muted: #94a3b8; /* Slate 400 */
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-bg: rgba(30, 41, 59, 0.75);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Base Reset */
 body {
     font-family: 'Red Hat Text', sans-serif;
-    background: var(--bg-darker);
-    color: var(--text-primary);
-    min-height: 100vh;
+    background-color: var(--bg-darker);
+    color: #f8fafc;
     overflow-x: hidden;
-    overflow-y: auto;
-    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* ===================================
-   ANIMATED BACKGROUND
-   =================================== */
+h1, h2, h3, h4, h5, h6, .logo-title {
+    font-family: 'Red Hat Display', sans-serif;
+    letter-spacing: -0.02em;
+}
 
-.bg-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+/* =========================================
+   1. Animated Background
+   ========================================= */
+.bg-gradient-overlay {
+    background: radial-gradient(circle at top left, #1e293b, transparent 60%), radial-gradient(circle at bottom right, #0f172a, transparent 60%), linear-gradient(135deg, var(--bg-darker) 0%, #111827 100%);
     z-index: 0;
-    overflow: hidden;
-}
-
-.bg-gradient {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, var(--bg-darker) 0%, #1a1f35 25%, var(--bg-dark) 50%, #1a1f35 75%, var(--bg-darker) 100% );
-}
-
-.floating-shapes {
-    position: absolute;
-    width: 100%;
-    height: 100%;
 }
 
 .shape {
     position: absolute;
-    border-radius: 50%;
-    filter: blur(100px);
+    filter: blur(90px);
     opacity: 0.4;
+    animation: float 20s ease-in-out infinite alternate;
 }
 
 .shape1 {
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, var(--primary), transparent);
-    top: -200px;
-    left: -100px;
-    animation: float1 20s ease-in-out infinite;
+    width: 600px;
+    height: 600px;
+    background: var(--primary);
+    top: -10%;
+    left: -10%;
 }
 
 .shape2 {
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, var(--secondary), transparent);
-    bottom: -150px;
-    right: -100px;
-    animation: float2 25s ease-in-out infinite;
+    width: 500px;
+    height: 500px;
+    background: var(--secondary);
+    bottom: -10%;
+    right: -10%;
+    animation-delay: -5s;
 }
 
 .shape3 {
-    width: 350px;
-    height: 350px;
-    background: radial-gradient(circle, var(--accent), transparent);
-    top: 50%;
-    left: 30%;
-    animation: float3 30s ease-in-out infinite;
-}
-
-.shape4 {
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, #8b5cf6, transparent);
-    bottom: 20%;
-    left: 10%;
-    animation: float4 22s ease-in-out infinite;
+    background: #8b5cf6;
+    top: 40%;
+    left: 40%;
+    opacity: 0.2;
+    animation-delay: -10s;
 }
 
-@keyframes float1 {
-    0%, 100% {
-        transform: translate(0, 0) scale(1);
+@keyframes float {
+    0% {
+        transform: translate(0, 0);
     }
 
-    33% {
-        transform: translate(50px, -80px) scale(1.1);
-    }
-
-    66% {
-        transform: translate(-30px, 60px) scale(0.9);
+    100% {
+        transform: translate(40px, 40px);
     }
 }
 
-@keyframes float2 {
-    0%, 100% {
-        transform: translate(0, 0) scale(1);
-    }
-
-    33% {
-        transform: translate(-60px, 50px) scale(1.15);
-    }
-
-    66% {
-        transform: translate(40px, -40px) scale(0.85);
-    }
-}
-
-@keyframes float3 {
-    0%, 100% {
-        transform: translate(0, 0) scale(1);
-    }
-
-    50% {
-        transform: translate(80px, 80px) scale(1.2);
-    }
-}
-
-@keyframes float4 {
-    0%, 100% {
-        transform: translate(0, 0) scale(1);
-    }
-
-    50% {
-        transform: translate(-50px, -50px) scale(1.1);
-    }
-}
-
-/* ===================================
-   PAGE WRAPPER
-   =================================== */
-
-.page-wrapper {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 30px 20px;
-}
-
+/* =========================================
+   2. Main Container
+   ========================================= */
 .registration-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    max-width: 1400px;
+    max-width: 1300px;
     width: 100%;
-    background: rgba(30, 41, 59, 0.85);
-    backdrop-filter: blur(40px);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    animation: slideIn 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-    margin: 20px auto;
+    min-height: 850px; /* Increased height to accommodate more spacing */
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-/* ===================================
-   FORM SECTION (LEFT)
-   =================================== */
-
+/* =========================================
+   3. Form Section Styling
+   ========================================= */
 .form-section {
-    padding: 50px 60px;
     background: rgba(15, 23, 42, 0.4);
+    position: relative;
     overflow-y: auto;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: var(--primary) transparent;
 }
 
+    /* Custom Scrollbar for Chrome/Edge */
     .form-section::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
     }
 
     .form-section::-webkit-scrollbar-track {
-        background: rgba(148, 163, 184, 0.1);
-        border-radius: 10px;
+        background: transparent;
     }
 
     .form-section::-webkit-scrollbar-thumb {
-        background: var(--primary);
+        background-color: rgba(255, 255, 255, 0.1);
         border-radius: 10px;
     }
 
-/* Logo Header */
-.logo-header {
-    margin-bottom: 40px;
-    animation: fadeInDown 0.8s ease-out 0.2s both;
-}
+        .form-section::-webkit-scrollbar-thumb:hover {
+            background-color: var(--primary);
+        }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
+/* Logo */
 .logo-icon {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(13deg, #002823, #47afc0);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 12px;
+    font-size: 24px;
     color: white;
-    box-shadow: 0 8px 24px rgba(5, 184, 166, 0.4);
-    animation: iconFloat 3s ease-in-out infinite;
-}
-
-@keyframes iconFloat {
-    0%, 100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-8px);
-    }
-}
-
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.logo-content {
-    flex: 1;
+    box-shadow: 0 8px 16px -2px rgba(20, 184, 166, 0.4);
 }
 
 .logo-title {
-    font-family: 'Red Hat Display', sans-serif; /* Changed */
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--text-primary);
-    line-height: 1.2;
-    margin: 0;
-    letter-spacing: -0.5px;
+    font-size: 1.5rem;
 }
 
 .logo-subtitle {
-    font-size: 13px;
-    color: var(--primary-light);
-    font-weight: 600;
-    margin: 2px 0 0 0;
-    letter-spacing: 0.5px;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    opacity: 0.9;
 }
 
 /* Form Header */
-.form-header {
-    margin-bottom: 35px;
-    animation: fadeIn 0.8s ease-out 0.3s both;
+.text-gradient {
+    background: linear-gradient(to right, #ffffff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-    .form-header h2 {
-        font-family: 'Red Hat Display', sans-serif; /* Changed */
-        font-size: 38px;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 8px;
-        letter-spacing: -0.5px;
+.text-secondary-light {
+    color: #cbd5e1;
+}
+
+/* =========================================
+   4. Inputs & Labels
+   ========================================= */
+/* Labels: High Contrast & Uppercase Style */
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+    .form-label i {
+        color: var(--secondary); /* Icon stays blue */
+        font-size: 0.9rem;
+        margin-right: 6px;
     }
 
-    .form-header p {
-        font-size: 15px;
-        color: var(--text-secondary);
+/* Inputs: Depth & Glow */
+.form-control {
+    background-color: rgba(0, 0, 0, 0.25); /* Dark inset */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: none !important; /* Remove all transitions on focus */
+}
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.25);
     }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
+    .form-control:focus,
+    .form-control:focus-visible,
+    .form-control:active {
+        background-color: rgba(0, 0, 0, 0.25) !important; /* Force same background */
+        border-color: rgba(255, 255, 255, 0.08) !important; /* Force same border */
+        box-shadow: none !important; /* Remove all shadows */
+        color: white !important;
+        transform: none !important;
+        outline: none !important;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ===================================
-   FORM ELEMENTS
-   =================================== */
-
-.registration-form {
-    animation: fadeIn 0.8s ease-out 0.4s both;
-}
-
-.form-group {
-    margin-bottom: 24px;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-/* Labels */
-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 10px;
-}
-
-    label i {
-        color: var(--primary);
-        font-size: 16px;
-    }
-
-.required {
-    color: var(--error);
-}
-
-.optional {
-    color: var(--text-muted);
-    font-weight: 400;
-    font-size: 13px;
-}
-
-/* Inputs */
-input,
-textarea {
-    width: 100%;
-    padding: 14px 18px;
-    background: var(--bg-input);
-    border: 2px solid var(--border);
-    border-radius: 12px;
-    color: var(--text-primary);
-    font-size: 16px;
-    font-family: 'Red Hat Text', sans-serif; /* Changed */
-    transition: all 0.3s ease;
-}
-
-    input::placeholder,
-    textarea::placeholder {
-        color: var(--text-muted);
-    }
-
-    input:focus,
-    textarea:focus {
-        outline: none;
-        background: rgba(30, 41, 59, 0.8);
-        border-color: var(--primary);
-        box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.15);
-        transform: translateY(-2px);
-    }
-
-textarea {
-    resize: vertical;
-    min-height: 90px;
-    line-height: 1.6;
-}
-
-/* Date Input */
-input[type="date"] {
-    color-scheme: dark;
-}
-
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        filter: invert(0.8);
-        cursor: pointer;
-    }
-
-/* Error & Success States */
-input.error,
-textarea.error {
-    border-color: var(--error);
-    background: rgba(239, 68, 68, 0.05);
-    animation: shake 0.4s ease;
-}
-
-@keyframes shake {
-    0%, 100% {
-        transform: translateX(0);
-    }
-
-    25% {
-        transform: translateX(-8px);
-    }
-
-    75% {
-        transform: translateX(8px);
-    }
-}
-
-input.success,
-textarea.success {
-    border-color: var(--success);
-    background: rgba(16, 185, 129, 0.05);
-}
-
-.error-message {
-    display: block;
-    color: var(--error);
-    font-size: 13px;
-    font-weight: 500;
-    margin-top: 8px;
-    min-height: 20px;
+/* Date Picker Icon Fix */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) opacity(0.7);
+    cursor: pointer;
 }
 
 /* Checkbox */
-.checkbox-group {
-    margin-bottom: 28px;
-}
-
-.checkbox-label {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
+.form-check-input {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
-    font-weight: 400;
 }
 
-    .checkbox-label input[type="checkbox"] {
-        display: none;
+    .form-check-input:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
     }
-
-.checkbox-custom {
-    width: 22px;
-    height: 22px;
-    min-width: 22px;
-    border: 2px solid var(--border);
-    border-radius: 6px;
-    background: var(--bg-input);
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
-    background: var(--primary);
-    border-color: var(--primary);
-}
-
-    .checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
-        content: '\f00c';
-        font-family: 'Font Awesome 5 Free';
-        font-weight: 900;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: white;
-        font-size: 12px;
-    }
-
-.checkbox-text {
-    color: var(--text-secondary);
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-.link {
-    color: var(--primary-light);
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.2s ease;
-}
-
-    .link:hover {
-        color: var(--primary);
-        text-decoration: underline;
-    }
-
-/* ===================================
-   SUBMIT BUTTON
-   =================================== */
-
+/* =========================================
+   5. Buttons & Interactive
+   ========================================= */
 .btn-submit {
-    width: 100%;
-    padding: 16px 32px;
-    background: linear-gradient(0deg, #002823, #47afc0);
-    border: none;
-    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
     color: white;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 24px rgb(5 18 17 / 70%);
-    position: relative;
-    overflow: hidden;
+    font-weight: 600;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    transition: var(--transition);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
 }
-
-    .btn-submit::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-        transition: left 0.6s ease;
-    }
-
-    .btn-submit:hover::before {
-        left: 100%;
-    }
 
     .btn-submit:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 32px rgba(13, 148, 136, 0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -5px rgba(20, 184, 166, 0.4);
+        background: linear-gradient(135deg, #2dd4bf, #0d9488);
     }
 
-    .btn-submit:active {
-        transform: translateY(-1px);
-    }
-
-.btn-icon {
-    transition: transform 0.3s ease;
+.link-hover:hover {
+    text-decoration: underline !important;
+    color: var(--primary) !important;
 }
 
-.btn-submit:hover .btn-icon {
-    transform: translateX(5px);
+/* =========================================
+   6. Right Panel (Hero)
+   ========================================= */
+.text-white-50 {
+    color: rgba(255, 255, 255, 0.6) !important;
 }
 
-/* Loading State */
-.btn-submit.loading {
-    pointer-events: none;
-    opacity: 0.8;
+.backdrop-blur {
+    backdrop-filter: blur(8px);
 }
 
-    .btn-submit.loading .btn-text,
-    .btn-submit.loading .btn-icon {
-        opacity: 0;
-    }
-
-    .btn-submit.loading::after {
-        content: '';
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        border: 3px solid rgba(255, 255, 255, 0.3);
-        border-top-color: white;
-        border-radius: 50%;
-        animation: spin 0.7s linear infinite;
-    }
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Form Footer */
-.form-footer {
-    text-align: center;
-    margin-top: 28px;
-}
-
-    .form-footer p {
-        font-size: 16px;
-        color: var(--text-secondary);
-    }
-
-/* ===================================
-   HERO SECTION (RIGHT)
-   =================================== */
-
-.hero-section {
-    padding: 50px 60px;
-    background: linear-gradient(135deg, #011412, #0a424c, #000000);
-    position: relative;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-}
-
-    .hero-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 1px, transparent 1px), radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-        background-size: 60px 60px;
-        opacity: 0.5;
-        animation: patternMove 30s linear infinite;
-    }
-
-@keyframes patternMove {
-    from {
-        background-position: 0 0;
-    }
-
-    to {
-        background-position: 60px 60px;
-    }
-}
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-    animation: fadeIn 0.8s ease-out 0.6s both;
-}
-
-/* Hero Header */
-.hero-header {
-    margin-bottom: 40px;
-}
-
-.hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 50px;
-    color: white;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-    .hero-badge i {
-        animation: pulse 2s ease-in-out infinite;
-    }
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    50% {
-        transform: scale(1.2);
-        opacity: 0.8;
-    }
-}
-
-.hero-header h1 {
-    font-family: 'Red Hat Display', sans-serif; /* Changed */
-    font-size: 50px;
-    font-weight: 800;
-    color: white;
-    line-height: 1.2;
-    margin-bottom: 16px;
-    letter-spacing: -1px;
-}
-
-.hero-header p {
-    font-size: 18px;
-    color: rgba(255, 255, 255, 0.95);
-    line-height: 1.7;
-}
-
-/* Hero Features */
-.hero-features {
-    display: grid;
-    gap: 16px;
-    margin-bottom: 40px;
-}
-
+/* Glass Feature Cards */
 .feature-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-    animation: fadeInUp 0.8s ease-out both;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: var(--transition);
 }
 
-    .feature-card:nth-child(1) {
-        animation-delay: 0.7s;
+    .feature-card:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
     }
-
-    .feature-card:nth-child(2) {
-        animation-delay: 0.8s;
-    }
-
-    .feature-card:nth-child(3) {
-        animation-delay: 0.9s;
-    }
-
-    .feature-card:nth-child(4) {
-        animation-delay: 1s;
-    }
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.feature-card:hover {
-    background: rgba(255, 255, 255, 0.18);
-    transform: translateX(8px);
-}
 
 .feature-icon {
-    width: 50px;
-    height: 50px;
-    min-width: 50px;
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    color: white;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--secondary);
+    font-size: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.feature-content h4 {
-    font-size: 19px;
-    font-weight: 700;
-    color: white;
-    margin-bottom: 6px;
-}
-
-.feature-content p {
-    font-size: 15px;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.5;
-}
-
-/* Hero Stats */
-.hero-stats {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 28px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.stat {
-    text-align: center;
-    color: white;
-}
-
-    .stat h3 {
-        font-size: 32px;
-        font-weight: 800;
-        margin-bottom: 4px;
-    }
-
-    .stat p {
-        font-size: 13px;
-        opacity: 0.95;
-        font-weight: 600;
-    }
-
-.stat-divider {
-    width: 1px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.3);
-}
-
-/* ===================================
-   RESPONSIVE DESIGN
-   =================================== */
-
-@media (max-width: 1200px) {
-    .form-section,
-    .hero-section {
-        padding: 50px 50px;
-    }
-
-    .hero-header h1 {
-        font-size: 36px;
-    }
-}
-
-@media (max-width: 968px) {
+/* =========================================
+   7. Responsive adjustments
+   ========================================= */
+@media (max-width: 991.98px) {
     .registration-container {
-        grid-template-columns: 1fr;
-        max-width: 600px;
-    }
-
-    .hero-section {
-        display: none;
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
     }
 
     .form-section {
-        max-height: none;
-    }
-}
-
-@media (max-width: 768px) {
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-
-    .form-section {
-        padding: 40px 30px;
-    }
-}
-
-@media (max-width: 576px) {
-    .page-wrapper {
-        padding: 20px 15px;
-    }
-
-    .registration-container {
-        border-radius: 20px;
-    }
-
-    .form-section {
-        padding: 35px 25px;
-    }
-
-    .logo-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 24px;
-    }
-
-    .logo-title {
-        font-size: 20px;
-    }
-
-    .logo-subtitle {
-        font-size: 12px;
-    }
-
-    .form-header h2 {
-        font-size: 26px;
-    }
-
-    input,
-    textarea {
-        padding: 12px 16px;
-        font-size: 14px;
+        padding: 1.5rem;
     }
 }

@@ -1,6 +1,6 @@
 ﻿/**
  * Troywings Technologies - Registration Page
- * Form Validation, Animations & User Interactions
+ * Form Validation, Animations & User Interactions (Bootstrap Compatible)
  */
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Clear error on input
     Object.keys(inputs).forEach(key => {
-        if (inputs[key] && inputs[key].tagName !== 'INPUT' || inputs[key].type !== 'checkbox') {
+        if (inputs[key] && inputs[key].type !== 'checkbox') {
             inputs[key].addEventListener('input', function () {
                 if (this.classList.contains('error')) {
                     this.classList.remove('error');
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // INPUT ANIMATIONS
     // ===================================
 
-    const allTextInputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea');
+    const allTextInputs = document.querySelectorAll('.form-control');
 
     allTextInputs.forEach(input => {
         input.addEventListener('focus', function () {
@@ -272,10 +272,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // ===================================
 
     document.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'submit') {
+        if (e.key === 'Enter' && e.target.classList.contains('form-control') && e.target.tagName !== 'TEXTAREA') {
             e.preventDefault();
 
-            const formElements = Array.from(form.querySelectorAll('input, textarea')).filter(el => {
+            const formElements = Array.from(form.querySelectorAll('.form-control')).filter(el => {
                 return el.type !== 'checkbox' && el.type !== 'submit';
             });
 
@@ -314,8 +314,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function submitForm() {
         const submitBtn = form.querySelector('.btn-submit');
-        const btnText = submitBtn.querySelector('.btn-text');
-        const btnIcon = submitBtn.querySelector('.btn-icon');
 
         // Show loading state
         submitBtn.classList.add('loading');
@@ -377,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function clearAllErrors() {
         Object.keys(inputs).forEach(key => {
-            if (inputs[key] && inputs[key].tagName !== 'INPUT' || inputs[key].type !== 'checkbox') {
+            if (inputs[key] && inputs[key].type !== 'checkbox') {
                 inputs[key].classList.remove('error', 'success');
             }
         });
@@ -497,7 +495,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ===================================
 
     console.log('%c🚀 Troywings Technologies', 'color: #14b8a6; font-size: 18px; font-weight: bold;');
-    console.log('%cRegistration System v1.0 - A Drive for Future', 'color: #94a3b8; font-size: 13px;');
+    console.log('%cRegistration System v1.0 (Bootstrap) - A Drive for Future', 'color: #94a3b8; font-size: 13px;');
     console.log('%cForm validation and animations active', 'color: #10b981; font-size: 12px;');
 });
 
