@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Show loading state
         submitBtn.classList.add('loading');
 
-        // Collect form data
+        // 1. Prepare the data
         const formData = {
             fullName: inputs.fullName.value.trim(),
             fatherName: inputs.fatherName.value.trim(),
@@ -328,29 +328,36 @@ document.addEventListener('DOMContentLoaded', function () {
             phone: inputs.phone.value.trim() || null
         };
 
-        // Simulate API call
-        setTimeout(() => {
-            // Remove loading state
-            submitBtn.classList.remove('loading');
+        // 2. Send to Backend
+        fetch('/Home/Register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Remove loading state
+                submitBtn.classList.remove('loading');
 
-            // Log data (for demo)
-            console.log('Registration Data:', formData);
-
-            // Show success
-            showNotification('Registration successful! Welcome to Troywings Technologies.', 'success');
-
-            // Reset form after delay
-            setTimeout(() => {
-                form.reset();
-                clearAllErrors();
-            }, 2000);
-
-            // In production, redirect to dashboard:
-            // setTimeout(() => {
-            //     window.location.href = '/dashboard';
-            // }, 1500);
-
-        }, 2500);
+                if (data.success) {
+                    // Success!
+                    showNotification(data.message, 'success');
+                    setTimeout(() => {
+                        form.reset();
+                        clearAllErrors();
+                    }, 2000);
+                } else {
+                    // Error from server (e.g., DB failed)
+                    showNotification(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                submitBtn.classList.remove('loading');
+                showNotification('Server error. Please try again.', 'error');
+            });
     }
 
     // ===================================
