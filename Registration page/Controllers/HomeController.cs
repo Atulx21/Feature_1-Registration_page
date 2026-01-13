@@ -48,7 +48,7 @@ namespace Registration_page.Controllers
                 dbCon.Server = "localhost";
                 dbCon.DatabaseName = "troywingsdb";
                 dbCon.UserName = "root";
-                dbCon.Password = "Pain@10z";  
+                dbCon.Password = "Password";  
 
                 // 4. Open Connection
                 if (dbCon.IsConnect())
