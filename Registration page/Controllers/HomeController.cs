@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Registration_page.Models;
-// These are required for the Database connection
+
 using MySql.Data.MySqlClient;
 using Registration_page.Data;
 
@@ -48,7 +48,7 @@ namespace Registration_page.Controllers
                 dbCon.Server = "localhost";
                 dbCon.DatabaseName = "troywingsdb";
                 dbCon.UserName = "root";
-                dbCon.Password = "Pain@10z"; // <--- CHANGE THIS if your password is empty or different
+                dbCon.Password = "Pain@10z";  
 
                 // 4. Open Connection
                 if (dbCon.IsConnect())
