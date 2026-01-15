@@ -1,0 +1,88 @@
+﻿@model List<Registration_page.Models.UserRegistrationModel>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Management | Troywings</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="~/css/userlist.css" />
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <h2 class="page-title"><i class="fas fa-users-cog"></i> Registered Users</h2>
+
+        <div class="table-panel">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Father's Name</th>
+                            <th>Address</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr id="row_@user.Id">
+                                <td><span class="badge bg-secondary">@user.Id</span></td>
+
+                                <td>
+                                    <span class="view-mode name fw-bold">@user.FullName</span>
+                                    <input class="editable-input d-none name-input" value="@user.FullName" />
+                                </td>
+
+                                <td>
+                                    <span class="view-mode email">@user.Email</span>
+                                    <input class="editable-input d-none email-input" value="@user.Email" />
+                                </td>
+
+                                <td>
+                                    <span class="view-mode phone">@user.Phone</span>
+                                    <input class="editable-input d-none phone-input" value="@user.Phone" />
+                                </td>
+
+                                <td>
+                                    <span class="view-mode father">@user.FatherName</span>
+                                    <input class="editable-input d-none father-input" value="@user.FatherName" />
+                                </td>
+
+                                <td>
+                                    <span class="view-mode address">@user.Address</span>
+                                    <input class="editable-input d-none address-input" value="@user.Address" />
+                                </td>
+
+                                <td class="text-end">
+                                    <button class="btn-action btn-edit" onclick="UserListManager.enableEdit(@user.Id)">
+                                        <i class="fas fa-pen"></i> Edit
+                                    </button>
+                                    <button class="btn-action btn-save" id="save_@user.Id" onclick="UserListManager.saveUser(@user.Id)">
+                                        <i class="fas fa-save"></i> Save
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/userlist.js"></script>
+
+</body>
+</html>

@@ -1,63 +1,140 @@
 ﻿using MySql.Data.MySqlClient;
-using Registration_page.Data;   // Imports your DBConnection helper
-using Registration_page.Models; // Imports your UserRegistrationModel
+using Registration_page.Data;
+using Registration_page.Models;
 using System.Data;
 
 namespace Registration_page.Services
 {
-    // This class implements the Interface we created in Step 2
     public class RegisterService : IRegisterService
     {
+        // 1. REGISTER USER (Existing Logic)
         public bool RegisterUser(UserRegistrationModel model, out string errorMessage)
         {
             errorMessage = "";
             try
             {
-                // 1. Get the Database Connection Instance
                 var dbCon = DBConnection.Instance();
-
-                // 2. Set the Credentials (REQUIRED for connection)
-                // These lines provide the "Key" to open the database door
                 dbCon.Server = "localhost";
                 dbCon.DatabaseName = "troywingsdb";
                 dbCon.UserName = "root";
-                dbCon.Password = "Pain@10z"; // <--- Ensure this matches your MySQL password
+                dbCon.Password = "Pain@10z";
 
-                // 3. Connect and Execute
                 if (dbCon.IsConnect())
                 {
-                    // Prepare the Command to call the Stored Procedure
                     var cmd = new MySqlCommand("sp_RegisterUser", dbCon.Connection);
-                    cmd.CommandType = CommandType.StoredProcedure; // <--- Tells C# this is a Procedure, not a query
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                    // Pass the parameters to the Procedure
-                    // These names (@p_FullName) must match what we wrote in MySQL Workbench
                     cmd.Parameters.AddWithValue("@p_FullName", model.FullName);
                     cmd.Parameters.AddWithValue("@p_FatherName", model.FatherName);
                     cmd.Parameters.AddWithValue("@p_DateOfBirth", model.DateOfBirth);
                     cmd.Parameters.AddWithValue("@p_Email", model.Email);
                     cmd.Parameters.AddWithValue("@p_Address", model.Address);
-
-                    // Handle null phone number (pass DBNull if phone is empty)
                     cmd.Parameters.AddWithValue("@p_Phone", model.Phone ?? (object)DBNull.Value);
 
-                    // Execute the Procedure
                     cmd.ExecuteNonQuery();
-
-                    // Close connection to free up resources
                     dbCon.Close();
-
-                    return true; // Success!
+                    return true;
                 }
                 else
                 {
-                    errorMessage = "Could not connect to the database. Please check your credentials.";
+                    errorMessage = "Database connection failed.";
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                errorMessage = "Error in RegisterService: " + ex.Message;
+                errorMessage = ex.Message;
+                return false;
+            }
+        }
+
+        // 2. GET ALL USERS (New Logic for the Table)
+        public List<UserRegistrationModel> GetAllUsers()
+        {
+            List<UserRegistrationModel> userList = new List<UserRegistrationModel>();
+
+            try
+            {
+                var dbCon = DBConnection.Instance();
+
+                // Ensure credentials are set (Same as above)
+                dbCon.Server = "localhost";
+                dbCon.DatabaseName = "troywingsdb";
+                dbCon.UserName = "root";
+                dbCon.Password = "Pain@10z";
+
+                if (dbCon.IsConnect())
+                {
+                    var cmd = new MySqlCommand("sp_GetAllUsers", dbCon.Connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Read the data line by line
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            userList.Add(new UserRegistrationModel
+                            {
+                                // We map the Database Columns to our C# Model
+                                // Ensure "Id" matches your DB column name (Id or UserID)
+                                Id = Convert.ToInt32(reader["Id"]),
+                                FullName = reader["FullName"].ToString(),
+                                FatherName = reader["FatherName"].ToString(),
+                                DateOfBirth = Convert.ToDateTime(reader["DateOfBirth"]),
+                                Email = reader["Email"].ToString(),
+                                Address = reader["Address"].ToString(),
+                                Phone = reader["PhoneNumber"].ToString() // Notice DB column is PhoneNumber
+                            });
+                        }
+                    }
+                    dbCon.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                // In a real app, log this error
+                Console.WriteLine("Error fetching users: " + ex.Message);
+            }
+
+            return userList;
+        }
+
+        public bool UpdateUser(UserRegistrationModel model, out string errorMessage)
+        {
+            errorMessage = "";
+            try
+            {
+                var dbCon = DBConnection.Instance();
+                // Credentials are already set in GetAllUsers/RegisterUser, or set them here again if needed.
+                // Best practice: Ensure credentials are set before connecting.
+                dbCon.Server = "localhost"; dbCon.DatabaseName = "troywingsdb"; dbCon.UserName = "root"; dbCon.Password = "Pain@10z";
+
+                if (dbCon.IsConnect())
+                {
+                    var cmd = new MySqlCommand("sp_UpdateUser", dbCon.Connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Add Parameters
+                    cmd.Parameters.AddWithValue("@p_Id", model.Id);
+                    cmd.Parameters.AddWithValue("@p_FullName", model.FullName);
+                    cmd.Parameters.AddWithValue("@p_Email", model.Email);
+                    cmd.Parameters.AddWithValue("@p_Phone", model.Phone ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@p_FatherName", model.FatherName);
+                    cmd.Parameters.AddWithValue("@p_Address", model.Address);
+
+                    cmd.ExecuteNonQuery();
+                    dbCon.Close();
+                    return true;
+                }
+                else
+                {
+                    errorMessage = "Database connection failed.";
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
                 return false;
             }
         }
