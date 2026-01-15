@@ -2,6 +2,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+// This connects your Interface to your Service
+builder.Services.AddScoped<Registration_page.Services.IRegisterService, Registration_page.Services.RegisterService>();
 
 var app = builder.Build();
 
