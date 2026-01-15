@@ -1,38 +1,67 @@
 ﻿/**
- * User List Management Logic
- * Handles row editing and AJAX updates.
+ * Troywings User Management
+ * Premium interactions & AJAX handling
  */
 
 const UserListManager = {
+
+    // Store original values to restore on cancel
+    originalValues: {},
+
     /**
-     * Toggles a row from View Mode to Edit Mode
-     * @param {number} id - The User ID
+     * Enable Edit Mode for a Row
      */
     enableEdit: function (id) {
         const row = document.getElementById(`row_${id}`);
         if (!row) return;
 
-        // 1. Toggle UI Elements
-        row.querySelectorAll('.view-mode').forEach(el => el.classList.add('d-none'));
-        row.querySelectorAll('.editable-input').forEach(el => el.classList.remove('d-none'));
+        // 1. Snapshot current values (for cancel functionality)
+        this.originalValues[id] = {
+            name: row.querySelector('.name').innerText,
+            email: row.querySelector('.email').innerText,
+            phone: row.querySelector('.phone').innerText,
+            father: row.querySelector('.father').innerText,
+            address: row.querySelector('.address').innerText
+        };
 
-        // 2. Toggle Buttons
-        const btnEdit = row.querySelector('.btn-edit');
-        const btnSave = row.querySelector('.btn-save');
-
-        if (btnEdit) btnEdit.style.display = 'none';
-        if (btnSave) btnSave.style.display = 'inline-flex';
+        // 2. Toggle UI to Inputs
+        this.toggleRowState(row, true);
     },
 
     /**
-     * Collects data and sends AJAX request to update user
-     * @param {number} id - The User ID
+     * Cancel Edit Mode
+     */
+    cancelEdit: function (id) {
+        const row = document.getElementById(`row_${id}`);
+        if (!row || !this.originalValues[id]) return;
+
+        // Restore values
+        const data = this.originalValues[id];
+        row.querySelector('.name-input').value = data.name;
+        row.querySelector('.email-input').value = data.email;
+        row.querySelector('.phone-input').value = data.phone;
+        row.querySelector('.father-input').value = data.father;
+        row.querySelector('.address-input').value = data.address;
+
+        // Switch back to View mode
+        this.toggleRowState(row, false);
+    },
+
+    /**
+     * Save Data via AJAX
      */
     saveUser: function (id) {
         const row = document.getElementById(`row_${id}`);
         if (!row) return;
 
-        // 1. Collect Data
+        const btnSave = row.querySelector('.btn-save');
+        const originalBtnContent = btnSave.innerHTML;
+
+        // Loading State
+        btnSave.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Saving...';
+        btnSave.disabled = true;
+
+        // Collect Data
         const updatedData = {
             Id: id,
             FullName: row.querySelector('.name-input').value,
@@ -40,15 +69,10 @@ const UserListManager = {
             Phone: row.querySelector('.phone-input').value,
             FatherName: row.querySelector('.father-input').value,
             Address: row.querySelector('.address-input').value,
-            DateOfBirth: new Date().toISOString() // Preserving date format
+            DateOfBirth: new Date().toISOString()
         };
 
-        // 2. Send AJAX Request
-        const btnSave = row.querySelector('.btn-save');
-        const originalText = btnSave.innerHTML;
-        btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-        btnSave.disabled = true;
-
+        // Send Request
         fetch('/Home/UpdateUser', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -57,48 +81,86 @@ const UserListManager = {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    this.updateRowUI(row, updatedData);
-                    this.showNotification(data.message, 'success');
+                    // Update Text Views
+                    row.querySelector('.name').innerText = updatedData.FullName;
+                    row.querySelector('.email').innerText = updatedData.Email;
+                    row.querySelector('.phone').innerText = updatedData.Phone;
+                    row.querySelector('.father').innerText = updatedData.FatherName;
+                    row.querySelector('.address').innerText = updatedData.Address;
+
+                    this.toggleRowState(row, false);
+                    this.showToast(data.message, 'success');
                 } else {
-                    this.showNotification("Error: " + data.message, 'error');
+                    this.showToast("Error: " + data.message, 'error');
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-                this.showNotification("Server communication failed.", 'error');
+                console.error(error);
+                this.showToast("Connection failed.", 'error');
             })
             .finally(() => {
-                // Restore button state
-                btnSave.innerHTML = originalText;
+                btnSave.innerHTML = originalBtnContent;
                 btnSave.disabled = false;
             });
     },
 
     /**
-     * Updates the View Mode text and reverts the UI
+     * Helper: Toggle between View (false) and Edit (true) states
      */
-    updateRowUI: function (row, data) {
-        // Update Text
-        row.querySelector('.view-mode.name').innerText = data.FullName;
-        row.querySelector('.view-mode.email').innerText = data.Email;
-        row.querySelector('.view-mode.phone').innerText = data.Phone;
-        row.querySelector('.view-mode.father').innerText = data.FatherName;
-        row.querySelector('.view-mode.address').innerText = data.Address;
+    toggleRowState: function (row, isEditMode) {
+        // Toggle Inputs vs Text
+        const views = row.querySelectorAll('.view-mode');
+        const inputs = row.querySelectorAll('.editable-input');
 
-        // Revert to View Mode
-        row.querySelectorAll('.view-mode').forEach(el => el.classList.remove('d-none'));
-        row.querySelectorAll('.editable-input').forEach(el => el.classList.add('d-none'));
+        views.forEach(el => el.classList.toggle('d-none', isEditMode));
+        inputs.forEach(el => el.classList.toggle('d-none', !isEditMode));
 
-        row.querySelector('.btn-edit').style.display = 'inline-flex';
-        row.querySelector('.btn-save').style.display = 'none';
+        // Toggle Buttons
+        const btnEdit = row.querySelector('.btn-edit');
+        const btnSave = row.querySelector('.btn-save');
+        const btnCancel = row.querySelector('.btn-cancel');
+
+        if (isEditMode) {
+            btnEdit.classList.add('d-none');
+            btnSave.style.display = 'inline-flex';
+            btnCancel.classList.remove('d-none');
+            btnCancel.style.display = 'inline-flex';
+            row.classList.add('editing-active'); // For styling highlights
+        } else {
+            btnEdit.classList.remove('d-none');
+            btnSave.style.display = 'none';
+            btnCancel.classList.add('d-none');
+            btnCancel.style.display = 'none';
+            row.classList.remove('editing-active');
+        }
     },
 
     /**
-     * Simple alert wrapper (can be replaced with a toast notification later)
+     * Show Professional Toast Notification
      */
-    showNotification: function (message, type) {
-        // For now, using standard alert. 
-        // In a real app, integrate with the toast system we used in registration.js
-        alert(message);
+    showToast: function (message, type) {
+        const container = document.getElementById('toast-container');
+        const toastEl = document.createElement('div');
+
+        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+        const color = type === 'success' ? '#14b8a6' : '#ef4444';
+
+        toastEl.className = 'toast show toast-custom fade-in-up';
+        toastEl.style.borderLeftColor = color;
+
+        toastEl.innerHTML = `
+            <div class="toast-body">
+                <i class="fas ${icon} fa-lg" style="color: ${color}"></i>
+                <span class="fw-medium">${message}</span>
+            </div>
+        `;
+
+        container.appendChild(toastEl);
+
+        // Auto remove
+        setTimeout(() => {
+            toastEl.style.opacity = '0';
+            setTimeout(() => toastEl.remove(), 300);
+        }, 4000);
     }
 };

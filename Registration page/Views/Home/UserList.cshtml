@@ -9,7 +9,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Management | Troywings</title>
+    <title>User Management | Troywings Technologies</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700&family=Red+Hat+Text:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,71 +22,107 @@
 </head>
 <body>
 
-    <div class="dashboard-container">
-        <h2 class="page-title"><i class="fas fa-users-cog"></i> Registered Users</h2>
+    <div class="bg-animation" aria-hidden="true">
+        <div class="bg-gradient-overlay"></div>
+        <div class="floating-shapes">
+            <div class="shape shape1"></div>
+            <div class="shape shape2"></div>
+            <div class="shape shape3"></div>
+        </div>
+    </div>
 
-        <div class="table-panel">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Full Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Father's Name</th>
-                            <th>Address</th>
-                            <th class="text-end">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in Model)
-                        {
-                            <tr id="row_@user.Id">
-                                <td><span class="badge bg-secondary">@user.Id</span></td>
+    <div class="dashboard-wrapper">
+        <div class="container-fluid dashboard-container">
 
-                                <td>
-                                    <span class="view-mode name fw-bold">@user.FullName</span>
-                                    <input class="editable-input d-none name-input" value="@user.FullName" />
-                                </td>
+            <div class="d-flex justify-content-between align-items-center mb-4 fade-in-up">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="logo-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div>
+                        <h2 class="page-title mb-0">User Management</h2>
+                        <p class="text-muted mb-0 small">Troywings Technologies Database</p>
+                    </div>
+                </div>
 
-                                <td>
-                                    <span class="view-mode email">@user.Email</span>
-                                    <input class="editable-input d-none email-input" value="@user.Email" />
-                                </td>
+                <a href="/" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                    <i class="fas fa-home me-2"></i> Back to Home
+                </a>
+            </div>
 
-                                <td>
-                                    <span class="view-mode phone">@user.Phone</span>
-                                    <input class="editable-input d-none phone-input" value="@user.Phone" />
-                                </td>
-
-                                <td>
-                                    <span class="view-mode father">@user.FatherName</span>
-                                    <input class="editable-input d-none father-input" value="@user.FatherName" />
-                                </td>
-
-                                <td>
-                                    <span class="view-mode address">@user.Address</span>
-                                    <input class="editable-input d-none address-input" value="@user.Address" />
-                                </td>
-
-                                <td class="text-end">
-                                    <button class="btn-action btn-edit" onclick="UserListManager.enableEdit(@user.Id)">
-                                        <i class="fas fa-pen"></i> Edit
-                                    </button>
-                                    <button class="btn-action btn-save" id="save_@user.Id" onclick="UserListManager.saveUser(@user.Id)">
-                                        <i class="fas fa-save"></i> Save
-                                    </button>
-                                </td>
+            <div class="table-panel fade-in-up delay-100">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th width="5%">ID</th>
+                                <th width="20%">Full Name</th>
+                                <th width="20%">Email</th>
+                                <th width="15%">Phone</th>
+                                <th width="15%">Father's Name</th>
+                                <th width="15%">Address</th>
+                                <th width="10%" class="text-end">Action</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                <tr id="row_@user.Id" class="user-row">
+                                    <td><span class="badge-id">#@user.Id</span></td>
+
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="avatar-circle">@user.FullName.Substring(0, 1).ToUpper()</div>
+                                            <div>
+                                                <span class="view-mode name fw-bold text-white">@user.FullName</span>
+                                                <input class="editable-input d-none name-input" value="@user.FullName" placeholder="Full Name" />
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <span class="view-mode email text-info-light">@user.Email</span>
+                                        <input class="editable-input d-none email-input" value="@user.Email" placeholder="Email" />
+                                    </td>
+
+                                    <td>
+                                        <span class="view-mode phone">@user.Phone</span>
+                                        <input class="editable-input d-none phone-input" value="@user.Phone" placeholder="Phone" />
+                                    </td>
+
+                                    <td>
+                                        <span class="view-mode father">@user.FatherName</span>
+                                        <input class="editable-input d-none father-input" value="@user.FatherName" placeholder="Father's Name" />
+                                    </td>
+
+                                    <td>
+                                        <span class="view-mode address text-truncate-2">@user.Address</span>
+                                        <textarea class="editable-input d-none address-input" rows="1">@user.Address</textarea>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <button class="btn-action btn-edit" onclick="UserListManager.enableEdit(@user.Id)">
+                                            <i class="fas fa-pen"></i> <span>Edit</span>
+                                        </button>
+                                        <button class="btn-action btn-save" id="save_@user.Id" onclick="UserListManager.saveUser(@user.Id)">
+                                            <i class="fas fa-check"></i> <span>Save</span>
+                                        </button>
+                                        <button class="btn-action btn-cancel d-none" id="cancel_@user.Id" onclick="UserListManager.cancelEdit(@user.Id)">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="~/js/userlist.js"></script>
+    <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/userlist.js"></script>
 </body>
 </html>
