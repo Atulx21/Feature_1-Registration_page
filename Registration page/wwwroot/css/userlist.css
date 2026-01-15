@@ -1,17 +1,16 @@
 ﻿/* =========================================
    Troywings Technologies - User Dashboard
-   Theme: Dark Glassmorphism (Contrast Fixed)
+   Theme: Dark Glassmorphism (Clean & Professional)
    ========================================= */
 
 :root {
     --primary: #14b8a6; /* Teal */
-    --primary-glow: rgba(20, 184, 166, 0.4);
     --secondary: #06b6d4; /* Cyan */
     --bg-dark: #0f172a; /* Slate 900 */
-    --glass-bg: rgba(15, 23, 42, 0.85); /* Darker opacity for better readability */
+    --glass-bg: rgba(15, 23, 42, 0.85);
     --glass-border: rgba(255, 255, 255, 0.1);
-    --text-main: #ffffff; /* Pure White */
-    --text-muted: #cbd5e1; /* Light Grey */
+    --text-main: #ffffff;
+    --text-muted: #94a3b8; /* Lighter Grey for visibility */
 }
 
 body {
@@ -112,8 +111,36 @@ h1, h2, h3, .page-title {
     justify-content: center;
     color: white;
     font-size: 20px;
-    box-shadow: 0 8px 16px -4px var(--primary-glow);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
+
+/* FIX: Subtitle Color */
+.text-subtitle {
+    color: var(--text-muted) !important;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+/* FIX: Back Button (Glass Style) */
+.btn-back {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--primary);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .btn-back:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
 
 /* --- 3. Glass Table Panel --- */
 .table-panel {
@@ -127,9 +154,9 @@ h1, h2, h3, .page-title {
     overflow: hidden;
 }
 
-/* --- FIX: FORCE TRANSPARENT BACKGROUNDS & WHITE TEXT --- */
+/* Table Cleanups */
 .table {
-    --bs-table-bg: transparent !important; /* Disables Bootstrap white background */
+    --bs-table-bg: transparent !important;
     --bs-table-color: var(--text-main) !important;
     color: var(--text-main);
     margin-bottom: 0;
@@ -138,7 +165,7 @@ h1, h2, h3, .page-title {
 }
 
     .table th {
-        background: rgba(0, 0, 0, 0.5) !important; /* Dark header */
+        background: rgba(0, 0, 0, 0.5) !important;
         color: var(--primary);
         font-weight: 700;
         text-transform: uppercase;
@@ -149,17 +176,15 @@ h1, h2, h3, .page-title {
     }
 
     .table td {
-        background-color: transparent !important; /* Ensures glass effect */
-        color: white !important; /* Forces white text */
+        background-color: transparent !important;
+        color: white !important;
         padding: 16px;
         border-bottom: 1px solid rgba(255,255,255,0.05);
-        transition: background 0.2s;
         vertical-align: middle;
     }
 
-/* Hover Effect */
 .user-row:hover td {
-    background-color: rgba(255,255,255,0.05) !important;
+    background-color: rgba(255,255,255,0.03) !important;
 }
 
 /* Avatar & Badges */
@@ -179,14 +204,12 @@ h1, h2, h3, .page-title {
 
 .badge-id {
     font-family: monospace;
-    color: #94a3b8; /* Light Grey ID */
-    font-size: 0.9rem;
+    color: #94a3b8;
     background: rgba(0,0,0,0.3);
     padding: 4px 8px;
     border-radius: 6px;
 }
 
-/* Text Colors */
 .text-info-light {
     color: #bae6fd !important;
 }
@@ -195,22 +218,24 @@ h1, h2, h3, .page-title {
     color: white !important;
 }
 
-/* --- 4. Inputs (Edit Mode) --- */
+/* --- 4. Inputs (Simple No-Glow) --- */
 .editable-input {
-    background: rgba(0, 0, 0, 0.6); /* Darker input background */
-    border: 1px solid var(--primary);
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #475569; /* Subtle border */
     color: white;
     padding: 8px 12px;
-    border-radius: 8px;
+    border-radius: 6px;
     width: 100%;
     font-size: 0.9rem;
-    box-shadow: 0 0 0 2px var(--primary-glow);
-    animation: fadeIn 0.3s ease;
+    transition: border-color 0.2s;
 }
 
+    /* FIX: Removed Glow, Just Simple Border Change */
     .editable-input:focus {
         outline: none;
-        box-shadow: 0 0 0 4px var(--primary-glow);
+        border-color: var(--primary); /* Just changes color */
+        background: rgba(0, 0, 0, 0.7);
+        box-shadow: none !important; /* Forces no glow */
     }
 
 /* --- 5. Buttons --- */
@@ -245,7 +270,6 @@ h1, h2, h3, .page-title {
 
     .btn-save:hover {
         background: #0d9488;
-        transform: translateY(-1px);
     }
 
 .btn-cancel {
@@ -260,7 +284,7 @@ h1, h2, h3, .page-title {
         color: white;
     }
 
-/* --- 6. Animations & Toast --- */
+/* --- 6. Toast & Animations --- */
 .fade-in-up {
     animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     opacity: 0;
@@ -278,17 +302,6 @@ h1, h2, h3, .page-title {
     }
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-/* Toast Styling */
 .toast-custom {
     background: rgba(15, 23, 42, 0.95);
     backdrop-filter: blur(10px);
